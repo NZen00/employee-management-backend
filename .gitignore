@@ -1,0 +1,38 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.cache
+*.csproj.user
+.vs/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Database
+*.mdf
+*.ldf
+*.ndf
+
+# Connection strings (IMPORTANT!)
+appsettings.Development.json
+appsettings.*.json
+!appsettings.json
+
+# Visual Studio
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
