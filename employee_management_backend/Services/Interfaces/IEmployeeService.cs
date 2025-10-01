@@ -6,6 +6,7 @@ namespace employee_management_backend.Services.Interfaces;
 public interface IEmployeeService
 {
     Task<List<Employee>> GetAllAsync();
+    Task<PagedResultDto<Employee>> GetPagedAsync(int page, int pageSize);
     Task<Employee> GetByIdAsync(int id);
     Task AddAsync(EmployeeDto employee);
     Task UpdateAsync(int id, EmployeeDto employee);

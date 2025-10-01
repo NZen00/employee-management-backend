@@ -1,4 +1,5 @@
 ﻿using employee_management_backend.Data;
+using employee_management_backend.Dtos;
 using employee_management_backend.Entities;
 using employee_management_backend.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -21,6 +22,53 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
               LEFT JOIN Department d ON e.DepartmentId = d.DepartmentId
               ORDER BY e.employeeId",
             MapEmployeeWithDepartment);
+    }
+
+    public async Task<PagedResultDto<Employee>> GetPagedAsync(int page, int pageSize)
+    {
+        var offset = (page - 1) * pageSize;
+
+        // Get total count
+        var totalCount = await ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Employee");
+
+        // Get paginated data with department join
+        var employees = await ExecuteReaderListAsync(
+            @"SELECT e.*, d.DepartmentCode, d.DepartmentName 
+          FROM Employee e 
+          LEFT JOIN Department d ON e.DepartmentId = d.DepartmentId
+          ORDER BY e.LastName, e.FirstName 
+          OFFSET @Offset ROWS 
+          FETCH NEXT @PageSize ROWS ONLY",
+            reader => new Employee
+            {
+                EmployeeId = reader.GetInt32("EmployeeId"),
+                FirstName = reader.GetString("FirstName"),
+                LastName = reader.GetString("LastName"),
+                Email = reader.GetString("Email"),
+                DateOfBirth = reader.GetDateTime("DateOfBirth"),
+                Age = reader.GetInt32("Age"),
+                Salary = reader.GetDecimal("Salary"),
+                DepartmentId = reader.GetInt32("DepartmentId"),
+                CreatedAt = reader.GetDateTime("CreatedAt"),
+                UpdatedAt = reader.IsDBNull("UpdatedAt") ? null : reader.GetDateTime("UpdatedAt"),
+                Department = !reader.IsDBNull(reader.GetOrdinal("DepartmentCode")) ? new Department
+                {
+                    DepartmentId = reader.GetInt32("DepartmentId"),
+                    DepartmentCode = reader.GetString("DepartmentCode"),
+                    DepartmentName = reader.GetString("DepartmentName")
+                } : null
+            },
+            new SqlParameter("@Offset", offset),
+            new SqlParameter("@PageSize", pageSize)
+        );
+
+        return new PagedResultDto<Employee>
+        {
+            Items = employees ?? new List<Employee>(),
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
     }
 
     public async Task<Employee?> GetByIdAsync(int id)

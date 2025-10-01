@@ -18,6 +18,20 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
 
+    [HttpGet("paged")] // New endpoint
+    public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        try
+        {
+            var result = await _service.GetPagedAsync(page, pageSize);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error retrieving employees." });
+        }
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {

@@ -18,6 +18,15 @@ public class EmployeeService : IEmployeeService
 
     public async Task<List<Employee>> GetAllAsync() => await _repository.GetAllAsync();
 
+    public async Task<PagedResultDto<Employee>> GetPagedAsync(int page, int pageSize)
+    {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100; // Max limit
+
+        return await _repository.GetPagedAsync(page, pageSize);
+    }
+
     public async Task<Employee> GetByIdAsync(int id)
     {
         var employee = await _repository.GetByIdAsync(id);
