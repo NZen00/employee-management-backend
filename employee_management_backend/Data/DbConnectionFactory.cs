@@ -1,5 +1,4 @@
-﻿// Data/DbConnectionFactory.cs
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 namespace employee_management_backend.Data;
 public class DbConnectionFactory : IDbConnectionFactory
 {
-    private readonly string? _connectionString; // Nullable to handle null case
+    private readonly string? _connectionString;
 
     public DbConnectionFactory(IConfiguration configuration)
     {

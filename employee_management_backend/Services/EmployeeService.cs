@@ -37,12 +37,10 @@ public class EmployeeService : IEmployeeService
     {
         await ValidateEmployeeAsync(employee);
 
-        // Calculate age for validation (but don't send to database)
         var age = CalculateAge(employee.DateOfBirth);
         if (age < 18)
             throw new ArgumentException("Employee must be at least 18 years old.");
 
-        // Check if email already exists
         if (await _repository.GetByEmailAsync(employee.Email) != null)
             throw new ArgumentException("Email address already exists.");
 
@@ -112,7 +110,6 @@ public class EmployeeService : IEmployeeService
             throw new ArgumentException("Selected department does not exist.");
     }
 
-    // Keep this helper method for validation
     private int CalculateAge(DateTime dateOfBirth)
     {
         var today = DateTime.Today;

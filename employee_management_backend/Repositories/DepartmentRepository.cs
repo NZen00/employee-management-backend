@@ -1,5 +1,4 @@
-﻿// Repositories/DepartmentRepository.cs
-using employee_management_backend.Data;
+﻿using employee_management_backend.Data;
 using employee_management_backend.Dtos;
 using employee_management_backend.Entities;
 using employee_management_backend.Repositories.Interfaces;
@@ -87,7 +86,6 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
     {
         var offset = (page - 1) * pageSize;
 
-        // Get total count - now works with ExecuteScalarAsync
         var totalCount = await ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Department");
 
         // Get paginated data

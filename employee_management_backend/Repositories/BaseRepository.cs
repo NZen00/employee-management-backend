@@ -1,5 +1,4 @@
-﻿// Repositories/BaseRepository.cs
-using employee_management_backend.Data;
+﻿using employee_management_backend.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;

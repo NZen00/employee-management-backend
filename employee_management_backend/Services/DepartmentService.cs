@@ -42,10 +42,10 @@ public class DepartmentService : IDepartmentService
             DepartmentName = department.DepartmentName
         };
         await _repository.AddAsync(domain);
-        department.DepartmentId = domain.DepartmentId; // Update DTO with ID
+        department.DepartmentId = domain.DepartmentId;
     }
 
-    public async Task UpdateAsync(int id, DepartmentDto department) // Changed to accept id
+    public async Task UpdateAsync(int id, DepartmentDto department) 
     {
         var existingId = await _repository.GetByIdAsync(id);
         if (existingId == null)
@@ -57,7 +57,7 @@ public class DepartmentService : IDepartmentService
 
         var domain = new Department
         {
-            DepartmentId = id, // Use URL id
+            DepartmentId = id,
             DepartmentCode = department.DepartmentCode,
             DepartmentName = department.DepartmentName
         };

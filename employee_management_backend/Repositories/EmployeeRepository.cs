@@ -28,10 +28,8 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
     {
         var offset = (page - 1) * pageSize;
 
-        // Get total count
         var totalCount = await ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Employee");
 
-        // Get paginated data with department join
         var employees = await ExecuteReaderListAsync(
             @"SELECT e.*, d.DepartmentCode, d.DepartmentName 
           FROM Employee e 
@@ -152,7 +150,6 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
     {
         var employee = MapEmployee(reader);
 
-        // Map department information if available
         if (!reader.IsDBNull(reader.GetOrdinal("DepartmentCode")))
         {
             employee.Department = new Department

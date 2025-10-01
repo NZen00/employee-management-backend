@@ -20,7 +20,7 @@ public class DepartmentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
 
-    [HttpGet("paged")] // New endpoint
+    [HttpGet("paged")]
     public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var result = await _service.GetPagedAsync(page, pageSize);

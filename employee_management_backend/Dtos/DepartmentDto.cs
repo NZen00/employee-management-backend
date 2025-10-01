@@ -21,7 +21,6 @@ public class PaginationRequestDto
     public int PageSize { get; set; } = 10;
 }
 
-// Dtos/PagedResultDto.cs
 public class PagedResultDto<T>
 {
     public List<T> Items { get; set; } = new();

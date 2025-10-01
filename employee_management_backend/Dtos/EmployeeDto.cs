@@ -43,7 +43,6 @@ public class EmployeeDto
     [Range(1, int.MaxValue, ErrorMessage = "Please select a valid department")]
     public int DepartmentId { get; set; }
 
-    // Optional: Include department info for display
     public string? DepartmentName { get; set; }
     public string? DepartmentCode { get; set; }
 }
