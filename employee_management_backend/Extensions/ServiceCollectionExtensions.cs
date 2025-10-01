@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         // Application Services
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
-        services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+        services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
         return services;
     }
