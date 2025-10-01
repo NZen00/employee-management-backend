@@ -15,6 +15,16 @@ public class DepartmentService : IDepartmentService
     }
 
     public async Task<List<Department>> GetAllAsync() => await _repository.GetAllAsync();
+
+    public async Task<PagedResultDto<Department>> GetPagedAsync(int page, int pageSize)
+    {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 10;
+        if (pageSize > 100) pageSize = 100; // Max limit
+
+        return await _repository.GetPagedAsync(page, pageSize);
+    }
+
     public async Task<Department> GetByIdAsync(int id)
     {
         var department = await _repository.GetByIdAsync(id);

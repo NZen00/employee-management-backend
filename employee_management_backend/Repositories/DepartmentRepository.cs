@@ -1,5 +1,6 @@
 ﻿// Repositories/DepartmentRepository.cs
 using employee_management_backend.Data;
+using employee_management_backend.Dtos;
 using employee_management_backend.Entities;
 using employee_management_backend.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -80,5 +81,41 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
         await ExecuteNonQueryAsync(
             "DELETE FROM Department WHERE DepartmentId = @Id",
             new SqlParameter("@Id", id));
+    }
+
+    public async Task<PagedResultDto<Department>> GetPagedAsync(int page, int pageSize)
+    {
+        var offset = (page - 1) * pageSize;
+
+        // Get total count - now works with ExecuteScalarAsync
+        var totalCount = await ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Department");
+
+        // Get paginated data
+        var departments = await ExecuteReaderListAsync(
+            @"SELECT * FROM Department 
+          ORDER BY DepartmentName 
+          OFFSET @Offset ROWS 
+          FETCH NEXT @PageSize ROWS ONLY",
+            reader => new Department
+            {
+                DepartmentId = reader.GetInt32(reader.GetOrdinal("DepartmentId")),
+                DepartmentCode = reader.GetString(reader.GetOrdinal("DepartmentCode")),
+                DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                UpdatedAt = reader.IsDBNull(reader.GetOrdinal("UpdatedAt"))
+                    ? null
+                    : reader.GetDateTime(reader.GetOrdinal("UpdatedAt"))
+            },
+            new SqlParameter("@Offset", offset),
+            new SqlParameter("@PageSize", pageSize)
+        );
+
+        return new PagedResultDto<Department>
+        {
+            Items = departments,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
     }
 }

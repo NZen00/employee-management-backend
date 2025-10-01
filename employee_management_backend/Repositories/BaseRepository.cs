@@ -68,4 +68,22 @@ public abstract class BaseRepository
 
         return results;
     }
+
+    protected async Task<T?> ExecuteScalarAsync<T>(string sql, params SqlParameter[] parameters)
+    {
+        using var connection = await _connectionFactory.CreateConnectionAsync() as SqlConnection;
+        using var command = new SqlCommand(sql, connection);
+
+        if (parameters?.Length > 0)
+        {
+            command.Parameters.AddRange(parameters);
+        }
+
+        var result = await command.ExecuteScalarAsync();
+
+        if (result == null || result == DBNull.Value)
+            return default;
+
+        return (T)Convert.ChangeType(result, typeof(T));
+    }
 }

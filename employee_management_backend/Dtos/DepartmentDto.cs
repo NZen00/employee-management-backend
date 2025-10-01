@@ -12,5 +12,21 @@ public class DepartmentDto
 
     [Required(ErrorMessage = "Department Name is required")]
     [MaxLength(100, ErrorMessage = "Department Name must be 100 characters or less")]
-    public string DepartmentName { get; set; } = string.Empty;
+    public string DepartmentName { get; set; } = string.Empty; 
+}
+
+public class PaginationRequestDto
+{
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+}
+
+// Dtos/PagedResultDto.cs
+public class PagedResultDto<T>
+{
+    public List<T> Items { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+    public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 }

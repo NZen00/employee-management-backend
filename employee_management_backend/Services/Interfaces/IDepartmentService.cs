@@ -6,6 +6,7 @@ namespace employee_management_backend.Services.Interfaces;
 public interface IDepartmentService
 {
     Task<List<Department>> GetAllAsync();
+    Task<PagedResultDto<Department>> GetPagedAsync(int page, int pageSize);
     Task<Department> GetByIdAsync(int id);
     Task AddAsync(DepartmentDto department);
     Task UpdateAsync(int id, DepartmentDto department);
